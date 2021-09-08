@@ -75,11 +75,10 @@ function createGalleryCardMarkup(gallery) {
   return gallery
     .map(
       ({ preview, original, description }) =>
-        // ${original} втсавить в href
         `        
           <li class="gallery__item">
-    <a href="" class="gallery__link">
-      <img class="gallery__image" src="${preview}" alt="${description}">
+    <a class="gallery__link" href="${original}" >
+      <img class="gallery__image" src="${preview}" alt="${description}" ">
     </a>
   </li>
   `,
@@ -88,8 +87,8 @@ function createGalleryCardMarkup(gallery) {
 }
 
 function onGalleryImageClick(e) {
-  // if (!e.target.conteins('gallery__image')) {
-  //   return
-  // }
-  console.dir(e.target)
+  const isGalleryImageEl = e.target.classList.contains('gallery__image')
+  if (!isGalleryImageEl) {
+    return
+  }
 }

@@ -63,7 +63,7 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ]
-
+/* ------------------- Делегирование и вывод всей галереи ------------------- */
 const galleryContainer = document.querySelector('.js-gallery')
 const imagesMarkup = createGalleryCardMarkup(galleryItems)
 
@@ -76,12 +76,12 @@ function createGalleryCardMarkup(gallery) {
     .map(
       ({ preview, original, description }) =>
         `        
-          <li class="gallery__item">
-    <a class="gallery__link" href="${original}" >
-      <img class="gallery__image" src="${preview}" alt="${description}" ">
+    <li class="gallery__item">
+    <a class="gallery__link" href="${preview}" >
+    <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}" >
     </a>
-  </li>
-  `,
+    </li>
+    `,
     )
     .join('')
 }
@@ -91,4 +91,17 @@ function onGalleryImageClick(e) {
   if (!isGalleryImageEl) {
     return
   }
+
+  const ImageEl = e.target
+  const parentImageCard = ImageEl.closest('gallery__item')
+
+  parentImageCard.classList.add('lightbox__overlay')
 }
+// ========================================================
+/* ------------------------ Открытие модального окна ------------------------ */
+// const modal = document.querySelector('.js-lightbox')
+// modal.addEventListener('click', onModalWindov)
+
+// function onModalWindov(e) {
+//   e.target.classList.add('is-open')
+// }

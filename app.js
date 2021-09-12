@@ -64,9 +64,12 @@ const galleryItems = [
   },
 ]
 
-/* ------------------- Делегирование и вывод всей галереи ------------------- */
+// /* ------------------- Делегирование и вывод всей галереи ------------------- */
 const galleryContainer = document.querySelector('.js-gallery')
 const imagesMarkup = createGalleryCardMarkup(galleryItems)
+const modal = document.querySelector('.js-lightbox')
+const galleryEl = document.querySelector('.gallery__image')
+const closeModalBtn = document.querySelector('[data-action="close-lightbox"]')
 
 galleryContainer.insertAdjacentHTML('beforeEnd', imagesMarkup)
 
@@ -76,7 +79,7 @@ function createGalleryCardMarkup(gallery) {
   return gallery
     .map(
       ({ preview, original, description }) =>
-        `        
+        `
     <li class="gallery__item">
     <a class="gallery__link" href="${original}" >
     <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}" >
@@ -89,26 +92,19 @@ function createGalleryCardMarkup(gallery) {
 
 function onGalleryImageClick(e) {
   e.preventDefault()
+
   const isGalleryImageEl = e.target.classList.contains('gallery__image')
   if (!isGalleryImageEl) {
     return
   }
+  modal.classList.add('is-open')
 }
 
 // ========================================================
-/* ------------------------ Открытие модального окна ------------------------ */
-const modal = document.querySelector('.js-lightbox')
-const galleryEl = document.querySelector('.gallery__image')
-const closeModalBtn = document.querySelector('[data-action="close-lightbox"]')
+/* ------------------------ Закрытие модального окна ------------------------ */
 
-galleryEl.addEventListener('click', onModalOpen)
 closeModalBtn.addEventListener('click', onModalClose)
-
-function onModalOpen() {
-  modal.classList.add('is-open')
-}
 
 function onModalClose() {
   modal.classList.remove('is-open')
 }
-// ============================

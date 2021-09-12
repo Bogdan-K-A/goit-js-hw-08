@@ -70,6 +70,7 @@ const imagesMarkup = createGalleryCardMarkup(galleryItems)
 const modal = document.querySelector('.js-lightbox')
 const galleryEl = document.querySelector('.gallery__image')
 const closeModalBtn = document.querySelector('[data-action="close-lightbox"]')
+const laitBox = document.querySelector('.lightbox__image')
 
 galleryContainer.insertAdjacentHTML('beforeEnd', imagesMarkup)
 
@@ -97,7 +98,20 @@ function onGalleryImageClick(e) {
   if (!isGalleryImageEl) {
     return
   }
+  // console.log(e.target.dataset.source)
+  // console.log(e.target.alt)
+  const { dataset, alt } = e.target
+
+  abdateAttribute(dataset.source, alt)
+
   modal.classList.add('is-open')
+}
+
+function abdateAttribute(src = '', alt = '') {
+  laitBox.src = src
+  //  laitBox.src = e.target.dataset.source
+  laitBox.alt = alt
+  // laitBox.alt = e.target.alt
 }
 
 // ========================================================
@@ -106,5 +120,7 @@ function onGalleryImageClick(e) {
 closeModalBtn.addEventListener('click', onModalClose)
 
 function onModalClose() {
+  abdateAttribute()
+
   modal.classList.remove('is-open')
 }

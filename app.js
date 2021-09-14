@@ -64,18 +64,20 @@ const galleryItems = [
   },
 ]
 
-// /* ------------------- Делегирование и вывод всей галереи ------------------- */
-const galleryContainer = document.querySelector('.js-gallery')
-const imagesMarkup = createGalleryCardMarkup(galleryItems)
-const modal = document.querySelector('.js-lightbox')
-const galleryEl = document.querySelector('.gallery__image')
-const closeModalBtn = document.querySelector('[data-action="close-lightbox"]')
-const laitBox = document.querySelector('.lightbox__image')
+const refs = {
+  galleryContainer: document.querySelector('.js-gallery'),
+  imagesMarkup: createGalleryCardMarkup(galleryItems),
+  modal: document.querySelector('.js-lightbox'),
+  galleryEl: document.querySelector('.gallery__image'),
+  closeModalBtn: document.querySelector('[data-action="close-lightbox"]'),
+  laitBox: document.querySelector('.lightbox__image'),
+  clickOverlayClose: document.querySelector('.lightbox__overlay'),
+}
 
-galleryContainer.insertAdjacentHTML('beforeEnd', imagesMarkup)
+refs.galleryContainer.insertAdjacentHTML('beforeEnd', refs.imagesMarkup)
+refs.galleryContainer.addEventListener('click', onGalleryImageClick)
 
-galleryContainer.addEventListener('click', onGalleryImageClick)
-
+/* ------------------- Делегирование и вывод всей галереи ------------------- */
 function createGalleryCardMarkup(gallery) {
   return gallery
     .map(
@@ -91,6 +93,7 @@ function createGalleryCardMarkup(gallery) {
     .join('')
 }
 
+/* ------------------------ Открытие модального окна ------------------------ */
 function onGalleryImageClick(e) {
   e.preventDefault()
 
@@ -98,29 +101,45 @@ function onGalleryImageClick(e) {
   if (!isGalleryImageEl) {
     return
   }
-  // console.log(e.target.dataset.source)
-  // console.log(e.target.alt)
-  const { dataset, alt } = e.target
 
+  window.addEventListener('keydown', onEscKeyDown)
+
+  const { dataset, alt } = e.target
   abdateAttribute(dataset.source, alt)
 
-  modal.classList.add('is-open')
+  refs.modal.classList.add('is-open')
 }
 
+/* ------------------------ Очистка атрибутов ------------------------ */
 function abdateAttribute(src = '', alt = '') {
-  laitBox.src = src
+  refs.laitBox.src = src
+  refs.laitBox.alt = alt
+
   //  laitBox.src = e.target.dataset.source
-  laitBox.alt = alt
   // laitBox.alt = e.target.alt
 }
-
 // ========================================================
+
 /* ------------------------ Закрытие модального окна ------------------------ */
-
-closeModalBtn.addEventListener('click', onModalClose)
-
+/* ------------------------ По клику на крестик ------------------------ */
+refs.closeModalBtn.addEventListener('click', onModalClose)
+refs.clickOverlayClose.addEventListener('click', onBackdropClick)
 function onModalClose() {
   abdateAttribute()
 
-  modal.classList.remove('is-open')
+  window.removeEventListener('keydown', onEscKeyDown)
+  refs.modal.classList.remove('is-open')
+}
+
+/* ------------------------ По клику на backdrop ------------------------ */
+function onBackdropClick() {
+  onModalClose()
+}
+
+/* ------------------------ Кнопка Esc ------------------------ */
+function onEscKeyDown(e) {
+  const isEscKey = e.code === 'Escape'
+  if (isEscKey) {
+    onModalClose()
+  }
 }
